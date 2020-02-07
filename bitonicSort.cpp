@@ -25,6 +25,20 @@ void allPrint(int data) {
 }
 
 
+bool increasing(int level){
+  int rank, size;
+  int mask = 2;  // Starts at 010 because first round already "done"
+  mask <<= level;
+  // cout << "\nMask " << mask << endl;
+
+  MPI_Comm_rank(MCW, &rank);
+  MPI_Comm_size(MCW, &size);
+
+  // cout << "And " << (rank & mask) << endl;
+  return !(rank & mask);
+}
+
+
 void cube(int f, int *data){
   int rank, size;
   int dest;
@@ -56,6 +70,16 @@ int main(int argc, char **argv) {
   cube(1, &data);
   cout << endl;
   allPrint(data);
+
+
+  // <<<<<<<<<Test>>>>>>>>>>>>>>
+  // for(int i = 0; i <= (size << 1); i++) {  // x is equal to the number of bits plus 1 (aka 8 processors x = 4 and 16 processors x = 5)
+  //   bool inc = increasing(i);
+  //   for(int j = i-2; j > 0; j--) {
+  //     cube(j, data);
+  //   }
+  // }
+  // <<<<<<<<<End Test>>>>>>>>>>>>>>
 
   MPI_Finalize();
   return 0;
